@@ -47,11 +47,11 @@ namespace Role_playing_game
                 throw new ArgumentException("Not Enough Mana!");
             }
         }
-        private void CheckForce(uint force)
+        public void CheckForce(uint force)
         {
             if (force < 1 || force > 4)
                 throw new ArgumentException("Force entered incorrectly(1-4)!");
         }
-        public abstract void SpellCast(Character character = null, uint force = 1);
+        public abstract void Use(Character character = null, uint force = 1);
     }
 }

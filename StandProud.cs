@@ -23,13 +23,12 @@ namespace Role_playing_game
                 _caster = value;
             }
         }
-
         StandProud(Wizard caster) : base(StandProudManaCost, false, true)
         {
             Caster = caster;
 
         }
-        public override void SpellCast(Character target = null, uint force = 1)
+        public override void Use(Character target = null, uint force = 1)
         {
             if (target == null)
             {

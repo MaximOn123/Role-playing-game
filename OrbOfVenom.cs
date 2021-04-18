@@ -4,25 +4,31 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class OrbofVenom : Artifact,IMagic
+    class OrbOfVenom : Artifact
     {
-        Character _user;
-        public OrbofVenom(Character user) : base(10, true) {
-            _user = user;
+        private Character _user;
+        private bool _isUsed = false;
+        const uint Power = 20;
+        public OrbOfVenom(Character user) : base(Power, true)
+        {
+            this._user = user;
         }
-        public void SpellCast(Character target, uint force = 0) {
-            if (target.State != Character.States.Dead)
+        public override void Use(Character target, uint force = 0)
+        {
+            if (target.State == Character.States.Normal | target.State == Character.States.Weak)
             {
-                if (target.HP - _power < 0)
-                {
-                    target.HP = 0;
-                    target.State = Character.States.Dead;
-
-                }
-                else target.HP -= _power;
+                target.HP -= (int)Power;
+                target.State = Character.States.Poisoned;
+                this._isUsed = true;
             }
-            else Console.WriteLine("Have some respect for the dead!");
-        
+            else
+            {
+                throw new ArgumentException("Orb of Venom can only be used on characters in normal or weak state");
+            }
+        }
+        public void Renew ()
+        {
+            this._isUsed = false;
         }
     }
 }

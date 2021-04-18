@@ -7,6 +7,6 @@ namespace Role_playing_game
 {
     interface IMagic
     {
-        void SpellCast(Character character = null, uint force = 1);
+        void Use(Character character = null, uint force = 1);
     }
 }

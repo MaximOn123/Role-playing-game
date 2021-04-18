@@ -4,39 +4,51 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class Dagon : Artifact,IMagic
+    class Dagon : Artifact, IMagic
     {
         Wizard _user;
-
-        public Dagon(Wizard user) : base(user.MaxMP, true) {
-            _user = user;
-
-        }
-        public void SpellCast(Character target, uint force = 1) {
-            if (IsRenewable())
+        const uint MaxPower = 200;
+        private int Power
+        {
+            get
             {
-                if (target.HP - force < 0)
+                return (int)this._power;
+            }
+            set
+            {
+                if (value > MaxPower)
                 {
-                    target.HP = 0;
-                    target.State = Character.States.Dead;
-                    _power -= force;
-
-
+                    this._power = MaxPower;
+                }
+                else if (value < 0)
+                {
+                    throw new ArgumentException("Power must be non-negative");
                 }
                 else
                 {
-                    target.HP -= force;
-                    _power -= force;
+                    this._power = (uint)value;
                 }
-                if (_power <= 0) _renewable = false;
-
-
             }
-            else Console.WriteLine("This artifact has used all of it's power!");
-        
-        
-        
-        
+        }
+        public Dagon(Wizard user) : base(MaxPower, true)
+        {
+            _user = user;
+        }
+        public override void Use(Character target, uint force = 1)
+        {
+            if (Power != 0)
+            {
+                target.HP -= (int)force;
+                Power -= (int)force;
+            }
+            else
+            {
+                throw new ArgumentException("This artifact has used all of it's power!");
+            }
+        }
+        public void Renew(uint power)
+        {
+            Power += (int)power;
         }
     }
 }

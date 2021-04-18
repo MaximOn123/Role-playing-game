@@ -124,7 +124,16 @@ namespace Role_playing_game
             }
             set
             {
-                if (!(value < this.HP & this.ArmorThread.ThreadState == ThreadState.Suspended))
+                bool? isThreadSuspended;
+                if (this.ArmorThread != null)
+                {
+                    isThreadSuspended = this.ArmorThread.ThreadState == ThreadState.Suspended;
+                }
+                else
+                {
+                    isThreadSuspended = null;
+                }
+                if (isThreadSuspended == null | isThreadSuspended == false)
                 {
                     if (value <= 0)
                     {
@@ -187,13 +196,13 @@ namespace Role_playing_game
             this.MaxHP = 100;
             this.HP = 100;
         }
-        public void NormalizeState() // Насчет normal или weak в заклинаниях можно не парится, все фиксится этим методом
+        public void NormalizeState()
         {
-            if (this.State == States.Weak && (double)this.HP / this.MaxHP >= 10)
+            if (this.State == States.Weak & (double)this.HP / this.MaxHP >= 0.1)
             {
                 this.State = States.Normal;
             }
-            else if (this.State == States.Normal && (double)this.HP / this.MaxHP < 10)
+            else if (this.State == States.Normal & (double)this.HP / this.MaxHP < 0.1)
             {
                 this.State = States.Weak;
             }

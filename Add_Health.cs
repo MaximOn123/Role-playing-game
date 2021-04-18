@@ -12,12 +12,7 @@ namespace Role_playing_game
         {
             _caster = caster;
         }
-        private void CheckForce(uint force)
-        {
-            if (force < 1 || force > 4)
-                throw new ArgumentException("Force entered incorrectly(1-4)!");
-        }
-        public override void SpellCast(Character target = null, uint force = 1)
+        public override void Use(Character target = null, uint force = 1)
         {
             if (target == null)
             {

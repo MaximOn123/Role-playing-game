@@ -33,7 +33,7 @@ namespace Role_playing_game
         {
             Thread.Sleep((info as ArmorInfo).Time);
         }
-        public override void SpellCast(Character target = null, uint force = 1)
+        public override void Use(Character target = null, uint force = 1)
         {
             if (target == null)
             {
@@ -61,7 +61,7 @@ namespace Role_playing_game
                 _time = (uint)value;
             }
         }
-        public ArmorInfo (uint time)
+        public ArmorInfo(uint time)
         {
             _time = time;
         }

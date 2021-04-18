@@ -4,30 +4,30 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class EyeOfSkadi:Artifact,IMagic
+    class EyeOfSkadi : Artifact
     {
         Character _user;
-        public EyeOfSkadi(Character user): base(0,true) {
+        private bool _isUsed = false;
+        public EyeOfSkadi(Character user) : base(0, false)
+        {
             _user = user;
         }
-        public void SpellCast(Character target, uint force = 1) {
-            if (IsRenewable())
+        public override void Use(Character target, uint force = 0)
+        {
+            if (!_isUsed)
             {
-                if (target.State == Character.States.Dead) Console.WriteLine("He is dead,he can't move anyway!");
-                else
-                {
-                    target.State = Character.States.Paralized;
-                    _renewable = false;
-                }
-            }
-            else Console.WriteLine("This artfiact broke down!");
-            
-            
-        
-        
-        
-        
-        }
 
+                if (target.State == Character.States.Dead)
+                {
+                    throw new ArgumentException("Target must not be dead");
+                }
+                target.State = Character.States.Paralized;
+                _isUsed = true;
+            }
+            else
+            {
+                throw new ArgumentException("This artifact has already been used");
+            }
+        }
     }
 }
