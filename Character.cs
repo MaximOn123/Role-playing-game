@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Role_playing_game
 {
@@ -19,6 +20,7 @@ namespace Role_playing_game
         private uint _hp;
         private uint _maxHP;
         private uint _xp;
+        public Thread ArmorThread;
         public uint ID { get; private set; }
         private static uint NextID = 1;
         public string Name
@@ -122,20 +124,23 @@ namespace Role_playing_game
             }
             set
             {
-                if (value <= 0)
+                if (!(value < this.HP & this.ArmorThread.ThreadState == ThreadState.Suspended))
                 {
-                    this._hp = 0;
-                    this.State = States.Dead;
+                    if (value <= 0)
+                    {
+                        this._hp = 0;
+                        this.State = States.Dead;
+                    }
+                    else if (value > this.MaxHP)
+                    {
+                        this._hp = (uint)this.MaxHP;
+                    }
+                    else
+                    {
+                        this._hp = (uint)value;
+                    }
+                    this.NormalizeState();
                 }
-                else if (value > this.MaxHP)
-                {
-                    this._hp = (uint)this.MaxHP;
-                }
-                else
-                {
-                    this._hp = (uint)value;
-                }
-                this.NormalizeState();
             }
         }
         public int MaxHP
@@ -232,7 +237,7 @@ namespace Role_playing_game
             {
                 if (value > this.MaxMP)
                 {
-                    this._mp = this.MaxMP;
+                    this._mp = (uint)this.MaxMP;
                 }
                 else if (value < 0)
                 {
