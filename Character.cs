@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class Character : IComparable
+   public class Character : IComparable
     {
         public enum States { Normal, Weak, Sick, Poisoned, Paralized, Dead }
         public enum Races { Human, Gnome, Elf, Orс, Goblin }
@@ -42,7 +42,7 @@ namespace Role_playing_game
             {
                 return this._state;
             }
-            protected set
+            set
             {
                 this._state = value;
                 if (this.State == States.Paralized)
@@ -72,7 +72,7 @@ namespace Role_playing_game
             {
                 return this._canMove;
             }
-            protected set
+            set
             {
                 this._canMove = value;
             }
@@ -114,13 +114,13 @@ namespace Role_playing_game
                 this._age = (uint)value;
             }
         }
-        public int HP
+        public uint HP
         {
             get
             {
-                return (int)this._hp;
+                return (uint)this._hp;
             }
-            protected set
+             set
             {
                 if (value <= 0)
                 {
@@ -142,7 +142,7 @@ namespace Role_playing_game
             }
             protected set
             {
-                if (value >= int.MaxValue)
+                if (value >= uint.MaxValue)
                 {
                     throw new ArgumentException("Max HP exceeds maximum allowable value");
                 }
@@ -208,17 +208,17 @@ namespace Role_playing_game
             return 0;
         }
     }
-    class Wizard : Character
+    public class Wizard : Character
     {
         private uint _mp;
         private uint _maxMP;
-        public int MP
+        public uint MP
         {
             get
             {
-                return (int)this._mp;
+                return (uint)this._mp;
             }
-            protected set
+            set
             {
                 this._mp = (uint)value;
             }
