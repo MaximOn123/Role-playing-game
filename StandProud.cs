@@ -4,38 +4,50 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class StandProud: Spell,IMagic
+    class StandProud : Spell
     {
-        Wizard Caster;
+        const uint StandProudManaCost = 85;
+        private Wizard _caster;
+        private Wizard Caster
+        {
+            get
+            {
+                return _caster;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentException("Caster must not be null!");
+                }
+                _caster = value;
+            }
+        }
 
-        StandProud(Wizard caster) : base(85, false, true)
+        StandProud(Wizard caster) : base(StandProudManaCost, false, true)
         {
             Caster = caster;
 
         }
         public override void SpellCast(Character target = null, uint force = 1)
         {
-
             if (target == null)
             {
                 target = Caster;
             }
-            try
-            {
-                CheckMana(Caster, minM);
-                CheckAction(Caster);
-            }
-            catch (Exception) { }
+            CheckMana(Caster, ManaCost);
+            CheckAction(Caster);
             if (target.State == Character.States.Paralized)
             {
-                Caster.MP -= minM;
+                Caster.MP -= (int)ManaCost;
                 target.HP = 1;
                 target.State = Character.States.Weak;
                 target.CanMove = true;
             }
             else
-                Console.WriteLine("The target is not Paralyzed!");
-         
+            {
+                throw new ArgumentException("The target is not Paralyzed!");
+            }
         }
     }
 }

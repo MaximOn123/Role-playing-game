@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Role_playing_game
 {
-   public class Character : IComparable
+    public class Character : IComparable
     {
         public enum States { Normal, Weak, Sick, Poisoned, Paralized, Dead }
         public enum Races { Human, Gnome, Elf, Orс, Goblin }
@@ -29,7 +29,7 @@ namespace Role_playing_game
             }
             private set
             {
-                if (this._name == null)
+                if (value == null)
                 {
                     throw new ArgumentNullException("Name must not be null");
                 }
@@ -114,18 +114,22 @@ namespace Role_playing_game
                 this._age = (uint)value;
             }
         }
-        public uint HP
+        public int HP
         {
             get
             {
-                return (uint)this._hp;
+                return (int)this._hp;
             }
-             set
+            set
             {
                 if (value <= 0)
                 {
                     this._hp = 0;
                     this.State = States.Dead;
+                }
+                else if (value > this.MaxHP)
+                {
+                    this._hp = (uint)this.MaxHP;
                 }
                 else
                 {
@@ -134,19 +138,23 @@ namespace Role_playing_game
                 this.NormalizeState();
             }
         }
-        public uint MaxHP
+        public int MaxHP
         {
             get
             {
-                return this._maxHP;
+                return (int)this._maxHP;
             }
             protected set
             {
-                if (value >= uint.MaxValue)
+                if (value >= int.MaxValue)
                 {
                     throw new ArgumentException("Max HP exceeds maximum allowable value");
                 }
-                this._maxHP = value;
+                else if (value < 0)
+                {
+                    throw new ArgumentException("Max HP must be non-negative");
+                }
+                this._maxHP = (uint)value;
                 this.NormalizeState();
             }
         }
@@ -171,8 +179,10 @@ namespace Role_playing_game
             this.CanSpeak = true;
             this.CanMove = true;
             this.State = States.Normal;
+            this.MaxHP = 100;
+            this.HP = 100;
         }
-        private void NormalizeState() // Насчет normal или weak в заклинаниях можно не парится, все фиксится этим методом
+        public void NormalizeState() // Насчет normal или weak в заклинаниях можно не парится, все фиксится этим методом
         {
             if (this.State == States.Weak && (double)this.HP / this.MaxHP >= 10)
             {
@@ -212,49 +222,51 @@ namespace Role_playing_game
     {
         private uint _mp;
         private uint _maxMP;
-        public uint MP
+        public int MP
         {
             get
             {
-                return (uint)this._mp;
+                return (int)this._mp;
             }
             set
             {
-                this._mp = (uint)value;
+                if (value > this.MaxMP)
+                {
+                    this._mp = this.MaxMP;
+                }
+                else if (value < 0)
+                {
+                    throw new ArgumentException("Mana can not be negative");
+                }
+                else
+                {
+                    this._mp = (uint)value;
+                }
             }
         }
-        public uint MaxMP
+        public int MaxMP
         {
             get
             {
-                return this._maxMP;
+                return (int)this._maxMP;
             }
             protected set
             {
                 if (value >= int.MaxValue)
                 {
-                    this._maxMP = value;
+                    throw new ArgumentException("Max MP exceeds maximum allowable value");
                 }
+                else if (value < 0)
+                {
+                    throw new ArgumentException("Max MP must be non-negative");
+                }
+                this._maxMP = (uint)value;
             }
         }
-        /* public void HealSpell(Character other) ------- примерный макет заклинания
-        {
-           // Character other = other1 as Character;
-            uint hpDifference = other.MaxHP - (uint)other.HP;
-            if (this.MP / 2 > hpDifference)
-            {
-                other.HP = (int)other.MaxHP;
-                this.MP -= (int)hpDifference * 2;
-            }
-            else
-            {
-                other.HP += this.MP / 2;
-                this.MP = 0;
-            }
-        }*/
         public Wizard(string name, Races race, Sexes sex) : base(name, race, sex)
         {
-
+            this.MaxMP = 100;
+            this.MP = 100;
         }
     }
 }

@@ -5,11 +5,8 @@ using System.Text;
 
 namespace Role_playing_game
 {
-     interface IMagic
+    interface IMagic
     {
-        void SpellCast(Character character=null, uint force=1);
-
-
-
+        void SpellCast(Character character = null, uint force = 1);
     }
 }

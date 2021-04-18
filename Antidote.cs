@@ -4,46 +4,49 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class Antidote : Spell, IMagic
+    class Antidote : Spell
     {
-        Wizard Caster;
-        Antidote(Wizard caster) : base(30, true, true)
+        const uint AntidoteManaCost = 30;
+        private Wizard _caster;
+        private Wizard Caster
+        {
+            get
+            {
+                return _caster;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentException("Caster must not be null!");
+                }
+                _caster = value;
+            }
+        }
+        public Antidote(Wizard caster) : base(AntidoteManaCost, true, true)
         {
             Caster = caster;
 
         }
         public override void SpellCast(Character target = null, uint force = 1)
         {
-
             if (target == null)
             {
                 target = Caster;
             }
-            try
-            {
-                CheckMana(Caster, minM);
-                CheckAction(Caster);
-                CheckVerbal(Caster);
-            }
-            catch (Exception) { }
+            CheckMana(Caster, ManaCost);
+            CheckAction(Caster);
+            CheckVerbal(Caster);
             if (target.State == Character.States.Poisoned)
             {
-                if (target.CanMove == false)
-                {
-                    Caster.MP -= minM;
-                    target.State = Character.States.Weak;
-                    target.CanMove = true;
-                }
-                else { 
-                    Caster.MP -= minM;
-                    target.State = Character.States.Normal;
-                }
+                Caster.MP -= (int)ManaCost;
+                target.State = Character.States.Normal;
+                target.NormalizeState();
             }
             else
-                Console.WriteLine("The target is not Poisoned!");
-
-
+            {
+                Console.WriteLine("The target is not poisoned!");
+            }
         }
-
     }
 }

@@ -4,52 +4,45 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    class Add_Health : Spell, IMagic
+    class Add_Health : Spell
     {
-        private uint heal;
-        private Wizard Caster;
+        private uint _heal;
+        private Wizard _caster;
+        public Add_Health(Wizard caster, uint manaCost = 2) : base(manaCost, true, false)
+        {
+            _caster = caster;
+        }
         private void CheckForce(uint force)
         {
             if (force < 1 || force > 4)
                 throw new ArgumentException("Force entered incorrectly(1-4)!");
         }
-        Add_Health(Wizard caster, uint mana) : base(mana, true, false)
-        {
-            Caster = caster;
-
-        }
-
         public override void SpellCast(Character target = null, uint force = 1)
         {
-
             if (target == null)
             {
-                target = Caster;
+                target = _caster;
             }
             if (target.State != Character.States.Dead)
             {
-                try
+                CheckForce(force);
+                CheckMana(_caster, ManaCost * force);
+                CheckVerbal(_caster);
+                _heal = ManaCost * force / 2;
+                _caster.MP -= (int)(ManaCost * force);
+                if (target.HP + _heal > target.MaxHP)
                 {
-                    CheckForce(force);
-                    CheckMana(Caster, minM * force);
-                    CheckVerbal(Caster);
-                }
-                catch (Exception) { }
-                heal = minM * force / 2;
-                if (target.HP + heal > target.MaxHP)
-                {
-                    Caster.MP -= minM * force;
-                    target.HP = target.MaxHP;
+                    target.HP = (int)target.MaxHP;
                 }
                 else
                 {
-                    Caster.MP -= minM * force;
-                    target.HP += heal;
-
-
+                    target.HP += (int)_heal;
                 }
             }
-            else Console.WriteLine("Your target is Dead!");
+            else
+            {
+                throw new ArgumentException("Your target is dead!");
+            }
         }
     }
 }
