@@ -23,7 +23,7 @@ namespace Role_playing_game
                 _caster = value;
             }
         }
-        Armor(Wizard caster) : base(ArmorManaCost, true, false)
+        public Armor(Wizard caster) : base(ArmorManaCost, true, false)
         {
             Caster = caster;
         }

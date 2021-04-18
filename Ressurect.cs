@@ -23,7 +23,7 @@ namespace Role_playing_game
                 _caster = value;
             }
         }
-        Ressurect(Wizard caster) : base(RessurectManaCost, true, true)
+        public Ressurect(Wizard caster) : base(RessurectManaCost, true, true)
         {
             Caster = caster;
 
