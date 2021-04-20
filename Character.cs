@@ -47,7 +47,7 @@ namespace Role_playing_game
             set
             {
                 this._state = value;
-                if (this.State == States.Paralized)
+                if (this.State == States.Paralized | this.State == States.Dead)
                 {
                     this.CanMove = false;
                 }
@@ -211,7 +211,7 @@ namespace Role_playing_game
         {
             string str = "Name: " + Name + "\nRace: " + Race.ToString() + "\nSex: " + Sex.ToString() + "\nAge: " + Age.ToString() +
                 "\nState: " + State.ToString() + "\nHP: " + HP.ToString() + "\nMax HP: " + MaxHP.ToString() + "\nXP: " + XP.ToString() +
-                "\nCan move: " + CanMove.ToString() + "\nCan speak: " + CanSpeak.ToString();
+                "\nCan move: " + CanMove.ToString() + "\nCan speak: " + CanSpeak.ToString() + "\n";
             return str;
         }
         public int CompareTo(object obj)
@@ -281,6 +281,11 @@ namespace Role_playing_game
         {
             this.MaxMP = 100;
             this.MP = 100;
+        }
+        override public string ToString()
+        {
+            string str = base.ToString() + "Max MP: " + MaxMP.ToString() + "\nMP: " + MP.ToString() + "\n";
+            return str;
         }
     }
 }

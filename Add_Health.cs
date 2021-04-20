@@ -8,21 +8,40 @@ namespace Role_playing_game
     {
         private uint _heal;
         private Wizard _caster;
+        private Wizard Caster
+        {
+            get
+            {
+                return _caster;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentException("Caster must not be null!");
+                }
+                if (value.State == Character.States.Dead)
+                {
+                    throw new ArgumentException("Caster must not be dead!");
+                }
+                _caster = value;
+            }
+        }
         public Add_Health(Wizard caster, uint manaCost = 2) : base(manaCost, true, false)
         {
-            _caster = caster;
+            Caster = caster;
         }
         public override void Use(Character target = null, uint force = 1)
         {
             if (target == null)
             {
-                target = _caster;
+                target = Caster;
             }
             if (target.State != Character.States.Dead)
             {
                 CheckForce(force);
-                CheckMana(_caster, ManaCost * force);
-                CheckVerbal(_caster);
+                CheckMana(Caster, ManaCost * force);
+                CheckVerbal(Caster);
                 _heal = ManaCost * force / 2;
                 _caster.MP -= (int)(ManaCost * force);
                 if (target.HP + _heal > target.MaxHP)

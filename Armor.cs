@@ -22,6 +22,10 @@ namespace Role_playing_game
                 {
                     throw new ArgumentException("Caster must not be null!");
                 }
+                if (value.State == Character.States.Dead)
+                {
+                    throw new ArgumentException("Caster must not be dead!");
+                }
                 _caster = value;
             }
         }

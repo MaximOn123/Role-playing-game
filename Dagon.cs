@@ -38,8 +38,8 @@ namespace Role_playing_game
         {
             if (Power != 0)
             {
-                target.HP -= (int)force;
                 Power -= (int)force;
+                target.HP -= (int)force;
             }
             else
             {
