@@ -22,7 +22,7 @@ namespace Role_playing_game
                 }
                 else if (value < 0)
                 {
-                    throw new ArgumentException("Power must be non-negative");
+                    throw new ArgumentException("Not enough power!");
                 }
                 else
                 {
