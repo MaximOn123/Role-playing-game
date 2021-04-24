@@ -8,11 +8,20 @@ namespace Role_playing_game
         {
             Character Char = new Character("Orс", Character.Races.Orс, Character.Sexes.Male);
             Wizard wiz = new Wizard("Wiz", Character.Races.Elf, Character.Sexes.Male);
-            wiz.HP -= 5;
+            //wiz.HP -= 5;
             Console.WriteLine(wiz.ToString());
             #region Magic
+            OrbOfVenom fi = new OrbOfVenom(Char);
+            EyeOfSkadi fifa = new EyeOfSkadi(Char);
             Add_Health heal1 = new Add_Health(wiz);//нормльный хил
             Add_Health heal2 = new Add_Health(wiz, 100);//хил с слишком большой затратой маны
+            wiz.tolearn(heal1);
+            wiz.pronounce(heal1);
+            wiz.toforget(heal1);
+            wiz.pronounce(heal1);
+            wiz.addart(fi);
+           // wiz.broadcastart(fi, Char);
+            Char.useart(fi, wiz);
             try
             {
                 heal2.Use(force: 5); //неправильный force

@@ -232,6 +232,68 @@ namespace Role_playing_game
             }
             return 0;
         }
+
+        private ArrayList _inventory = new ArrayList();
+        public void addart(object o)
+        {
+            if (o is Artifact)
+            {
+                _inventory.Add(o);
+            }
+        }
+
+        public void useart(object o, object target)
+        {
+            Artifact art = o as Artifact;
+            Character ch = target as Character;
+            if (_inventory.Contains(o))
+            {
+                art.Use(ch);
+            }
+
+            if (art._renewable == false)
+            {
+                _inventory.Remove(o);
+            }
+        }
+        public void removalart(object o)
+        {
+            if (_inventory.Contains(o))
+            {
+                _inventory.Remove(o);
+            }
+        }
+        public void broadcastart(object o, Character ch)
+        {      
+            if (_inventory.Contains(o))
+            {
+                ch.addart(o);
+                removalart(o);
+            }
+        }
+        private ArrayList _spell = new ArrayList();
+        public void pronounce(object o)
+        {
+            Spell sp = o as Spell;
+            if (_inventory.Contains(o))
+            {
+                sp.Use();
+            }
+        }
+        public void toforget(object o)
+        {
+            if (_inventory.Contains(o))
+            {
+                _inventory.Remove(o);
+            }
+        }
+        public void tolearn(object o)
+        {
+            if (o is Spell && _inventory.Contains(o))
+            {
+                _inventory.Add(o);
+            }
+        }
     }
     public class Wizard : Character
     {
@@ -287,63 +349,6 @@ namespace Role_playing_game
         {
             string str = base.ToString() + "Max MP: " + MaxMP.ToString() + "\nMP: " + MP.ToString() + "\n";
             return str;
-        }
-        private ArrayList _inventory = new ArrayList();
-        public void addart(object o)
-        {
-            if (o is Artifact)
-            {
-                _inventory.Add(o);
-            }
-        }
-
-        public void useart(object o)
-        {
-            if (_inventory.Contains(o))
-              {
-                  //нужно реализовать использование
-              }
-            Artifact art = o as Artifact;
-            if(art._renewable == false)
-            {
-                _inventory.Remove(o);
-            }
-        }
-        public void removalart(object o)
-        {
-            if (_inventory.Contains(o))
-            {
-                  _inventory.Remove(o);
-            }
-        }
-        public void broadcastart(object o )
-        {
-            if (_inventory.Contains(o))
-            {
-                //предача артефакта от одного персонажа другому нужно доделать
-            }
-        }
-        private ArrayList _spell = new ArrayList();
-        public void pronounce(object o)
-        {
-            if (_inventory.Contains(o))
-            {
-                //нужно реализовать использование
-            }
-        }
-        public void toforget(object o)
-        {
-            if (_inventory.Contains(o))
-            {
-                _inventory.Remove(o);
-            }
-        }
-        public void tolearn(object o)
-        {
-            if (o is Spell)
-            {
-                _inventory.Add(o);
-            }
         }
     }
 }
