@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Collections;
 
 namespace Role_playing_game
 {
@@ -47,7 +48,7 @@ namespace Role_playing_game
             set
             {
                 this._state = value;
-                if (this.State == States.Paralized)
+                if (this.State == States.Paralized | this.State == States.Dead)
                 {
                     this.CanMove = false;
                 }
@@ -211,7 +212,7 @@ namespace Role_playing_game
         {
             string str = "Name: " + Name + "\nRace: " + Race.ToString() + "\nSex: " + Sex.ToString() + "\nAge: " + Age.ToString() +
                 "\nState: " + State.ToString() + "\nHP: " + HP.ToString() + "\nMax HP: " + MaxHP.ToString() + "\nXP: " + XP.ToString() +
-                "\nCan move: " + CanMove.ToString() + "\nCan speak: " + CanSpeak.ToString();
+                "\nCan move: " + CanMove.ToString() + "\nCan speak: " + CanSpeak.ToString() + "\n";
             return str;
         }
         public int CompareTo(object obj)
@@ -230,6 +231,56 @@ namespace Role_playing_game
                 return -1;
             }
             return 0;
+        }
+
+        private ArrayList _inventory = new ArrayList();
+        public void addart(object o)
+        {
+            if (o is Artifact)
+            {
+                _inventory.Add(o);
+            }
+            else
+            {
+                throw new ArgumentException("This object is not an artifact");
+            }
+        }
+
+        public void useart(object o, Character target = null)
+        {
+            Artifact art = o as Artifact;
+            if (_inventory.Contains(o))
+            {
+                art.Use(target);
+            }
+            else
+            {
+                throw new ArgumentException("Failed to use the artifact");
+            }
+
+            if (art._renewable == false)
+            {
+                _inventory.Remove(o);
+            }
+        }
+        public void removalart(object o)
+        {
+            if (_inventory.Contains(o))
+            {
+                _inventory.Remove(o);
+            }
+        }
+        public void broadcastart(object o, Character ch)
+        {
+            if (_inventory.Contains(o))
+            {
+                ch.addart(o);
+                removalart(o);
+            }
+            else
+            {
+                throw new ArgumentException("There is no such artifact in the bag");
+            }
         }
     }
     public class Wizard : Character
@@ -281,6 +332,53 @@ namespace Role_playing_game
         {
             this.MaxMP = 100;
             this.MP = 100;
+        }
+        override public string ToString()
+        {
+            string str = base.ToString() + "Max MP: " + MaxMP.ToString() + "\nMP: " + MP.ToString() + "\n";
+            return str;
+        }
+        private ArrayList _spell = new ArrayList();
+        public void pronounce(object o)
+        {
+            Spell sp = o as Spell;
+            if (_spell.Contains(o))
+            {
+                sp.Use();
+            }
+            else
+            {
+                throw new ArgumentException("Failed to cast the spell");
+            }
+        }
+        public void toforget(object o)
+        {
+            if (_spell.Contains(o))
+            {
+                _spell.Remove(o);
+            }
+            else
+            {
+                throw new ArgumentException("This spell is not learned");
+            }
+        }
+        public void tolearn(object o)
+        {
+            if (o is Spell)
+            {
+                if (_spell.Contains(o))
+                {
+                    _spell.Add(o);
+                }
+                else
+                {
+                    throw new ArgumentException("It's not a spell");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("This spell has already been studied");
+            }
         }
     }
 }
