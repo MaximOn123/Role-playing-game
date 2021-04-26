@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    abstract class Spell : IMagic
+    public abstract class Spell : IMagic
     {
         private uint _manaCost;
         private bool _isVoiceRequired;

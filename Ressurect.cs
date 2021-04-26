@@ -20,6 +20,10 @@ namespace Role_playing_game
                 {
                     throw new ArgumentException("Caster must not be null!");
                 }
+                if (value.State == Character.States.Dead)
+                {
+                    throw new ArgumentException("Caster must not be dead!");
+                }
                 _caster = value;
             }
         }
@@ -30,13 +34,13 @@ namespace Role_playing_game
         }
         public override void Use(Character target = null, uint force = 1)
         {
+            CheckMana(Caster, ManaCost);
+            CheckAction(Caster);
+            CheckVerbal(Caster);
             if (target == null)
             {
                 target = Caster;
             }
-            CheckMana(Caster, ManaCost);
-            CheckAction(Caster);
-            CheckVerbal(Caster);
             if (target.State == Character.States.Dead)
             {
                 Caster.MP -= (int)ManaCost;

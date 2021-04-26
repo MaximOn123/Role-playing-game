@@ -234,43 +234,45 @@ namespace Role_playing_game
         }
 
         private ArrayList _inventory = new ArrayList();
-        public void addart(object o)
+        public void addart(Artifact o)
         {
-            if (o is Artifact)
+            if (!_inventory.Contains(o))
             {
                 _inventory.Add(o);
             }
             else
             {
-                throw new ArgumentException("This object is not an artifact");
+                throw new ArgumentException("Such an artifact already exists");
             }
         }
 
-        public void useart(object o, Character target = null)
+        public void useart(Artifact o, Character target = null, uint ar =0)
         {
-            Artifact art = o as Artifact;
             if (_inventory.Contains(o))
             {
-                art.Use(target);
+                o.Use(target,ar);
             }
             else
             {
-                throw new ArgumentException("Failed to use the artifact");
+                throw new ArgumentException("The character does not have such an aretifact");
             }
-
-            if (art._renewable == false)
+            if (o.IsRenewable() == false)
             {
                 _inventory.Remove(o);
             }
         }
-        public void removalart(object o)
+        public void removalart(Artifact o)
         {
             if (_inventory.Contains(o))
             {
                 _inventory.Remove(o);
             }
+            else
+            {
+                throw new ArgumentException("The character does not have such an aretifact");
+            }
         }
-        public void broadcastart(object o, Character ch)
+        public void broadcastart(Artifact o, Character ch)
         {
             if (_inventory.Contains(o))
             {
@@ -339,19 +341,40 @@ namespace Role_playing_game
             return str;
         }
         private ArrayList _spell = new ArrayList();
-        public void pronounce(object o)
+        public void pronounce(Spell o,Character ar=null ,uint a=1)
         {
-            Spell sp = o as Spell;
             if (_spell.Contains(o))
             {
-                sp.Use();
+                o.Use(force:a, character:ar);
             }
             else
             {
-                throw new ArgumentException("Failed to cast the spell");
+                throw new ArgumentException("This spell is not learned");
             }
         }
-        public void toforget(object o)
+        public void pronounce(Spell o, uint a = 1)
+        {
+            if (_spell.Contains(o))
+            {
+                o.Use(force: a);
+            }
+            else
+            {
+                throw new ArgumentException("This spell is not learned");
+            }
+        }
+        public void pronounce(Spell o)
+        {
+            if (_spell.Contains(o))
+            {
+                o.Use();
+            }
+            else
+            {
+                throw new ArgumentException("This spell is not learned");
+            }
+        }
+        public void toforget(Spell o)
         {
             if (_spell.Contains(o))
             {
@@ -362,23 +385,16 @@ namespace Role_playing_game
                 throw new ArgumentException("This spell is not learned");
             }
         }
-        public void tolearn(object o)
+        public void tolearn(Spell o)
         {
-            if (o is Spell)
-            {
-                if (_spell.Contains(o))
-                {
-                    _spell.Add(o);
-                }
-                else
-                {
-                    throw new ArgumentException("It's not a spell");
-                }
-            }
-            else
-            {
-                throw new ArgumentException("This spell has already been studied");
-            }
+              if (!_spell.Contains(o))
+              {
+                  _spell.Add(o);
+              }
+              else
+              {
+                  throw new ArgumentException("This spell is not learned");
+              }
         }
     }
 }

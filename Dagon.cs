@@ -22,7 +22,7 @@ namespace Role_playing_game
                 }
                 else if (value < 0)
                 {
-                    throw new ArgumentException("Power must be non-negative");
+                    throw new ArgumentException("Not enough power!");
                 }
                 else
                 {
@@ -38,8 +38,8 @@ namespace Role_playing_game
         {
             if (Power != 0)
             {
-                target.HP -= (int)force;
                 Power -= (int)force;
+                target.HP -= (int)force;
             }
             else
             {

@@ -8,7 +8,7 @@ namespace Role_playing_game
     {
         public enum Sizes { Small, Medium, Big }
         private Sizes _size;
-        private Wizard _user;
+        private Character _user;
         private bool _isEmpty = false;
         public bool IsEmpty
         {
@@ -21,7 +21,7 @@ namespace Role_playing_game
                 _isEmpty = value;
             }
         }
-        public Clarity(Wizard user, Sizes size) : base(0, false)
+        public Clarity(Character user, Sizes size) : base(0, false)
         {
             _user = user;
             _size = size;
