@@ -39,16 +39,13 @@ namespace Role_playing_game
             {
                 target = Caster;
             }
-            if (target.State == Character.States.Sick)
-            {
-                Caster.MP -= (int)ManaCost;
-                target.State = Character.States.Normal;
-                target.NormalizeState();
-            }
-            else
+            if (target.State != Character.States.Sick)
             {
                 throw new ArgumentException("The target is not sick!");
             }
+            Caster.MP -= (int)ManaCost;
+            target.State = Character.States.Normal;
+            target.NormalizeState();
         }
     }
 }

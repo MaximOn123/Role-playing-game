@@ -21,6 +21,7 @@ namespace Role_playing_game
         private uint _hp;
         private uint _maxHP;
         private uint _xp;
+        private ArrayList _inventory = new ArrayList();
         public Thread ArmorThread;
         public uint ID { get; private set; }
         private static uint NextID = 1;
@@ -232,52 +233,49 @@ namespace Role_playing_game
             }
             return 0;
         }
-        private ArrayList _inventory = new ArrayList();
-        public void addart(Artifact o)
+        public void AddArtifact(Artifact artifact)
         {
-            if (!_inventory.Contains(o))
+            if (_inventory.Contains(artifact))
             {
-                _inventory.Add(o);
+                throw new ArgumentException("The character already possesses this artifact");
             }
-            else
+            _inventory.Add(artifact);
+        }
+        public void UseArtifact(Artifact artifact, Character target = null, uint force = 1)
+        {
+            if (!_inventory.Contains(artifact))
             {
-                throw new ArgumentException("Such an artifact already exists");
+                throw new ArgumentException("The character does not have this aretifact");
+            }
+            artifact.Use(target, force);
+            if (artifact.IsRenewable() == false)
+            {
+                _inventory.Remove(artifact);
             }
         }
-        public void useart(Artifact o, Character target = null, uint ar =0)
+        public void RemoveArtifact(Artifact o)
         {
             if (!_inventory.Contains(o))
             {
-             throw new ArgumentException("The character does not have such an aretifact"); 
-            }
-            o.Use(target,ar);
-            if (o.IsRenewable() == false)
-            {
-                _inventory.Remove(o);
-            }
-        }
-        public void removalart(Artifact o)
-        {
-            if (!_inventory.Contains(o))
-            {
-                 throw new ArgumentException("The character does not have such an aretifact");   
+                throw new ArgumentException("The character does not have such an aretifact");
             }
             _inventory.Remove(o);
         }
-        public void broadcastart(Artifact o, Character ch)
+        public void TransferArtifact(Artifact o, Character ch)
         {
             if (!_inventory.Contains(o))
             {
                 throw new ArgumentException("There is no such artifact in the bag");
             }
-            ch.addart(o);
-            removalart(o);
+            ch.AddArtifact(o);
+            RemoveArtifact(o);
         }
     }
     public class Wizard : Character
     {
         private uint _mp;
         private uint _maxMP;
+        private ArrayList _spellBook = new ArrayList();
         public int MP
         {
             get
@@ -329,47 +327,29 @@ namespace Role_playing_game
             string str = base.ToString() + "Max MP: " + MaxMP.ToString() + "\nMP: " + MP.ToString() + "\n";
             return str;
         }
-        private ArrayList _spell = new ArrayList();
-        public void pronounce(Spell o,Character ar=null ,uint a=1)
+        public void UseSpell(Spell spell, Character target = null, uint force = 1)
         {
-            if (!_spell.Contains(o))
-            {
-            throw new ArgumentException("This spell is not learned");
-            }
-            o.Use(force:a, character:ar);
-        }
-        public void pronounce(Spell o, uint a = 1)
-        {
-            if (!_spell.Contains(o))
+            if (!_spellBook.Contains(spell))
             {
                 throw new ArgumentException("This spell is not learned");
-                
             }
-            o.Use(force: a);
+            spell.Use(target, force);
         }
-        public void pronounce(Spell o)
+        public void ForgetSpell(Spell spell)
         {
-            if (!_spell.Contains(o))
+            if (!_spellBook.Contains(spell))
             {
-            throw new ArgumentException("This spell is not learned"); 
+                throw new ArgumentException("This spell is not learned");
             }
-            o.Use();
+            _spellBook.Remove(spell);
         }
-        public void toforget(Spell o)
+        public void LearnSpell(Spell spell)
         {
-            if (!_spell.Contains(o))
+            if (_spellBook.Contains(spell))
             {
-            throw new ArgumentException("This spell is not learned"); 
+                throw new ArgumentException("This spell is already learned");
             }
-            _spell.Remove(o);
-        }
-        public void tolearn(Spell o)
-        {
-              if (_spell.Contains(o))
-              {
-              throw new ArgumentException("This spell is already learned"); 
-              }
-             _spell.Add(o);
+            _spellBook.Add(spell);
         }
     }
 }

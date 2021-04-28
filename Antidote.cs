@@ -41,16 +41,13 @@ namespace Role_playing_game
             {
                 target = Caster;
             }
-            if (target.State == Character.States.Poisoned)
+            if (target.State != Character.States.Poisoned)
             {
-                Caster.MP -= (int)ManaCost;
-                target.State = Character.States.Normal;
-                target.NormalizeState();
+                throw new ArgumentException("The target is not poisoned!");   
             }
-            else
-            {
-                Console.WriteLine("The target is not poisoned!");
-            }
+            Caster.MP -= (int)ManaCost;
+            target.State = Character.States.Normal;
+            target.NormalizeState();
         }
     }
 }

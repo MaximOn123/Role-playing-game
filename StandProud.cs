@@ -40,17 +40,14 @@ namespace Role_playing_game
             {
                 target = Caster;
             }
-            if (target.State == Character.States.Paralized)
-            {
-                Caster.MP -= (int)ManaCost;
-                target.HP = 1;
-                target.State = Character.States.Weak;
-                target.CanMove = true;
-            }
-            else
+            if (target.State != Character.States.Paralized)
             {
                 throw new ArgumentException("The target is not Paralyzed!");
             }
+            Caster.MP -= (int)ManaCost;
+            target.HP = 1;
+            target.State = Character.States.Weak;
+            target.CanMove = true;
         }
     }
 }

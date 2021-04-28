@@ -41,16 +41,13 @@ namespace Role_playing_game
             {
                 target = Caster;
             }
-            if (target.State == Character.States.Dead)
-            {
-                Caster.MP -= (int)ManaCost;
-                target.State = Character.States.Weak;
-                target.HP = 1;
-            }
-            else
+            if (target.State != Character.States.Dead)
             {
                 throw new ArgumentException("The target is not dead!");
             }
+            Caster.MP -= (int)ManaCost;
+            target.State = Character.States.Weak;
+            target.HP = 1;
         }
     }
 }

@@ -16,33 +16,33 @@ namespace Role_playing_game
             Add_Health heal2 = new Add_Health(wiz, 100);//хил с слишком большой затратой маны
             try
             {
-                wiz.addart(fi);
+                wiz.AddArtifact(fi);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
             {
-                wiz.broadcastart(fi, Char);
+                wiz.TransferArtifact(fi, Char);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
             {
-                Char.useart(fi, wiz);
+                Char.UseArtifact(fi, wiz);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
             {
-                wiz.tolearn(heal1);
+                wiz.LearnSpell(heal1);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
             {
-                wiz.pronounce(heal1);
+                wiz.UseSpell(heal1);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
 
             try
             {
-                wiz.toforget(heal1);
+                wiz.ForgetSpell(heal1);
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
@@ -57,7 +57,7 @@ namespace Role_playing_game
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             try
             {
-             //   heal1.Use(force: 2);//всё ок
+                heal1.Use(force: 2);//всё ок
             }
             catch (ArgumentException e) { Console.WriteLine(e.Message); }
             Console.WriteLine(wiz.ToString());

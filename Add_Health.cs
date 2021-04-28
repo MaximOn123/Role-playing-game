@@ -37,25 +37,22 @@ namespace Role_playing_game
             {
                 target = Caster;
             }
-            if (target.State != Character.States.Dead)
+            if (target.State == Character.States.Dead)
             {
-                CheckForce(force);
-                CheckMana(Caster, ManaCost * force);
-                CheckVerbal(Caster);
-                _heal = ManaCost * force / 2;
-                _caster.MP -= (int)(ManaCost * force);
-                if (target.HP + _heal > target.MaxHP)
-                {
-                    target.HP = (int)target.MaxHP;
-                }
-                else
-                {
-                    target.HP += (int)_heal;
-                }
+                throw new ArgumentException("Your target is dead!");
+            }
+            CheckForce(force);
+            CheckMana(Caster, ManaCost * force);
+            CheckVerbal(Caster);
+            _heal = ManaCost * force / 2;
+            _caster.MP -= (int)(ManaCost * force);
+            if (target.HP + _heal > target.MaxHP)
+            {
+                target.HP = (int)target.MaxHP;
             }
             else
             {
-                throw new ArgumentException("Your target is dead!");
+                target.HP += (int)_heal;
             }
         }
     }

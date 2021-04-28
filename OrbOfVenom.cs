@@ -15,16 +15,14 @@ namespace Role_playing_game
         }
         public override void Use(Character target, uint force = 0)
         {
-            if (target.State == Character.States.Normal | target.State == Character.States.Weak)
-            {
-                target.HP -= (int)Power;
-                target.State = Character.States.Poisoned;
-                this._isUsed = true;
-            }
-            else
+            if (!(target.State == Character.States.Normal | target.State == Character.States.Weak))
             {
                 throw new ArgumentException("Orb of Venom can only be used on characters in normal or weak state");
+                
             }
+            target.HP -= (int)Power;
+            target.State = Character.States.Poisoned;
+            this._isUsed = true;
         }
         public void Renew()
         {

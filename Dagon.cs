@@ -6,7 +6,7 @@ namespace Role_playing_game
 {
     class Dagon : Artifact, IMagic
     {
-        Wizard _user;
+        Character _user;
         const uint MaxPower = 200;
         private int Power
         {
@@ -30,21 +30,19 @@ namespace Role_playing_game
                 }
             }
         }
-        public Dagon(Wizard user) : base(MaxPower, true)
+        public Dagon(Character user) : base(MaxPower, true)
         {
             _user = user;
         }
         public override void Use(Character target, uint force = 1)
         {
-            if (Power != 0)
-            {
-                Power -= (int)force;
-                target.HP -= (int)force;
-            }
-            else
+            if (Power == 0)
             {
                 throw new ArgumentException("This artifact has used all of it's power!");
+                
             }
+            Power -= (int)force;
+            target.HP -= (int)force;
         }
         public void Renew(uint power)
         {
