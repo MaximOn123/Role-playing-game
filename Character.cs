@@ -232,7 +232,6 @@ namespace Role_playing_game
             }
             return 0;
         }
-
         private ArrayList _inventory = new ArrayList();
         public void addart(Artifact o)
         {
@@ -245,17 +244,13 @@ namespace Role_playing_game
                 throw new ArgumentException("Such an artifact already exists");
             }
         }
-
         public void useart(Artifact o, Character target = null, uint ar =0)
         {
-            if (_inventory.Contains(o))
+            if (!_inventory.Contains(o))
             {
-                o.Use(target,ar);
+             throw new ArgumentException("The character does not have such an aretifact"); 
             }
-            else
-            {
-                throw new ArgumentException("The character does not have such an aretifact");
-            }
+            o.Use(target,ar);
             if (o.IsRenewable() == false)
             {
                 _inventory.Remove(o);
@@ -263,26 +258,20 @@ namespace Role_playing_game
         }
         public void removalart(Artifact o)
         {
-            if (_inventory.Contains(o))
+            if (!_inventory.Contains(o))
             {
-                _inventory.Remove(o);
+                 throw new ArgumentException("The character does not have such an aretifact");   
             }
-            else
-            {
-                throw new ArgumentException("The character does not have such an aretifact");
-            }
+            _inventory.Remove(o);
         }
         public void broadcastart(Artifact o, Character ch)
         {
-            if (_inventory.Contains(o))
-            {
-                ch.addart(o);
-                removalart(o);
-            }
-            else
+            if (!_inventory.Contains(o))
             {
                 throw new ArgumentException("There is no such artifact in the bag");
             }
+            ch.addart(o);
+            removalart(o);
         }
     }
     public class Wizard : Character
@@ -343,58 +332,44 @@ namespace Role_playing_game
         private ArrayList _spell = new ArrayList();
         public void pronounce(Spell o,Character ar=null ,uint a=1)
         {
-            if (_spell.Contains(o))
+            if (!_spell.Contains(o))
             {
-                o.Use(force:a, character:ar);
+            throw new ArgumentException("This spell is not learned");
             }
-            else
-            {
-                throw new ArgumentException("This spell is not learned");
-            }
+            o.Use(force:a, character:ar);
         }
         public void pronounce(Spell o, uint a = 1)
         {
-            if (_spell.Contains(o))
-            {
-                o.Use(force: a);
-            }
-            else
+            if (!_spell.Contains(o))
             {
                 throw new ArgumentException("This spell is not learned");
+                
             }
+            o.Use(force: a);
         }
         public void pronounce(Spell o)
         {
-            if (_spell.Contains(o))
+            if (!_spell.Contains(o))
             {
-                o.Use();
+            throw new ArgumentException("This spell is not learned"); 
             }
-            else
-            {
-                throw new ArgumentException("This spell is not learned");
-            }
+            o.Use();
         }
         public void toforget(Spell o)
         {
-            if (_spell.Contains(o))
+            if (!_spell.Contains(o))
             {
-                _spell.Remove(o);
+            throw new ArgumentException("This spell is not learned"); 
             }
-            else
-            {
-                throw new ArgumentException("This spell is not learned");
-            }
+            _spell.Remove(o);
         }
         public void tolearn(Spell o)
         {
-              if (!_spell.Contains(o))
+              if (_spell.Contains(o))
               {
-                  _spell.Add(o);
+              throw new ArgumentException("This spell is already learned"); 
               }
-              else
-              {
-                  throw new ArgumentException("This spell is not learned");
-              }
+             _spell.Add(o);
         }
     }
 }
