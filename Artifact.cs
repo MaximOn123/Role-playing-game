@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Role_playing_game
 {
-    abstract class Artifact : IMagic
+    public abstract class Artifact : IMagic
     {
-        public uint _power;
-        public bool _renewable;
+        protected uint _power;
+        private bool _renewable;
         public Artifact(uint power, bool isRenewable)
         {
             _power = power;

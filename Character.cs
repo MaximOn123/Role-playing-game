@@ -232,67 +232,46 @@ namespace Role_playing_game
             }
             return 0;
         }
-
         private ArrayList _inventory = new ArrayList();
-        public void addart(object o)
+        public void addart(Artifact o)
         {
-            if (o is Artifact)
+            if (!_inventory.Contains(o))
             {
                 _inventory.Add(o);
             }
-        }
-
-        public void useart(object o, object target)
-        {
-            Artifact art = o as Artifact;
-            Character ch = target as Character;
-            if (_inventory.Contains(o))
+            else
             {
-                art.Use(ch);
+                throw new ArgumentException("Such an artifact already exists");
             }
-
-            if (art._renewable == false)
+        }
+        public void useart(Artifact o, Character target = null, uint ar =0)
+        {
+            if (!_inventory.Contains(o))
+            {
+             throw new ArgumentException("The character does not have such an aretifact"); 
+            }
+            o.Use(target,ar);
+            if (o.IsRenewable() == false)
             {
                 _inventory.Remove(o);
             }
         }
-        public void removalart(object o)
+        public void removalart(Artifact o)
         {
-            if (_inventory.Contains(o))
+            if (!_inventory.Contains(o))
             {
-                _inventory.Remove(o);
+                 throw new ArgumentException("The character does not have such an aretifact");   
             }
+            _inventory.Remove(o);
         }
-        public void broadcastart(object o, Character ch)
-        {      
-            if (_inventory.Contains(o))
-            {
-                ch.addart(o);
-                removalart(o);
-            }
-        }
-        private ArrayList _spell = new ArrayList();
-        public void pronounce(object o)
+        public void broadcastart(Artifact o, Character ch)
         {
-            Spell sp = o as Spell;
-            if (_inventory.Contains(o))
+            if (!_inventory.Contains(o))
             {
-                sp.Use();
+                throw new ArgumentException("There is no such artifact in the bag");
             }
-        }
-        public void toforget(object o)
-        {
-            if (_inventory.Contains(o))
-            {
-                _inventory.Remove(o);
-            }
-        }
-        public void tolearn(object o)
-        {
-            if (o is Spell && _inventory.Contains(o))
-            {
-                _inventory.Add(o);
-            }
+            ch.addart(o);
+            removalart(o);
         }
     }
     public class Wizard : Character
@@ -349,6 +328,48 @@ namespace Role_playing_game
         {
             string str = base.ToString() + "Max MP: " + MaxMP.ToString() + "\nMP: " + MP.ToString() + "\n";
             return str;
+        }
+        private ArrayList _spell = new ArrayList();
+        public void pronounce(Spell o,Character ar=null ,uint a=1)
+        {
+            if (!_spell.Contains(o))
+            {
+            throw new ArgumentException("This spell is not learned");
+            }
+            o.Use(force:a, character:ar);
+        }
+        public void pronounce(Spell o, uint a = 1)
+        {
+            if (!_spell.Contains(o))
+            {
+                throw new ArgumentException("This spell is not learned");
+                
+            }
+            o.Use(force: a);
+        }
+        public void pronounce(Spell o)
+        {
+            if (!_spell.Contains(o))
+            {
+            throw new ArgumentException("This spell is not learned"); 
+            }
+            o.Use();
+        }
+        public void toforget(Spell o)
+        {
+            if (!_spell.Contains(o))
+            {
+            throw new ArgumentException("This spell is not learned"); 
+            }
+            _spell.Remove(o);
+        }
+        public void tolearn(Spell o)
+        {
+              if (_spell.Contains(o))
+              {
+              throw new ArgumentException("This spell is already learned"); 
+              }
+             _spell.Add(o);
         }
     }
 }

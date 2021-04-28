@@ -26,7 +26,7 @@ namespace Role_playing_game
                 throw new ArgumentException("Orb of Venom can only be used on characters in normal or weak state");
             }
         }
-        public void Renew ()
+        public void Renew()
         {
             this._isUsed = false;
         }
