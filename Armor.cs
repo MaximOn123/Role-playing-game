@@ -8,7 +8,7 @@ namespace Role_playing_game
     class Armor : Spell
     {
         const uint ArmorManaCost = 50;
-        const uint ArmorDuration = 5000;
+        const uint ArmorDuration = 4000;
         private Wizard _caster;
         private Wizard Caster
         {

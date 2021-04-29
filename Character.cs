@@ -126,32 +126,38 @@ namespace Role_playing_game
             }
             set
             {
-                bool? isThreadSuspended;
+                bool? isArmorActive;
                 if (this.ArmorThread != null)
                 {
-                    isThreadSuspended = this.ArmorThread.ThreadState == ThreadState.Suspended;
+                    isArmorActive = this.ArmorThread.ThreadState == ThreadState.Suspended;
                 }
                 else
                 {
-                    isThreadSuspended = null;
+                    isArmorActive = null;
                 }
-                if (isThreadSuspended == null | isThreadSuspended == false)
+                if (isArmorActive != null & isArmorActive == true)
                 {
-                    if (value <= 0)
+                    if (value < this._hp)
                     {
-                        this._hp = 0;
-                        this.State = States.Dead;
+                        return;
                     }
-                    else if (value > this.MaxHP)
-                    {
-                        this._hp = (uint)this.MaxHP;
-                    }
-                    else
-                    {
-                        this._hp = (uint)value;
-                    }
-                    this.NormalizeState();
                 }
+                if (value <= 0)
+                {
+                    this._hp = 0;
+                    this.State = States.Dead;
+                    this.CanMove = true;
+                    this.CanSpeak = true;
+                }
+                else if (value > this.MaxHP)
+                {
+                    this._hp = (uint)this.MaxHP;
+                }
+                else
+                {
+                    this._hp = (uint)value;
+                }
+                this.NormalizeState();
             }
         }
         public int MaxHP
@@ -253,22 +259,22 @@ namespace Role_playing_game
                 _inventory.Remove(artifact);
             }
         }
-        public void RemoveArtifact(Artifact o)
+        public void RemoveArtifact(Artifact artifact)
         {
-            if (!_inventory.Contains(o))
+            if (!_inventory.Contains(artifact))
             {
                 throw new ArgumentException("The character does not have such an aretifact");
             }
-            _inventory.Remove(o);
+            _inventory.Remove(artifact);
         }
-        public void TransferArtifact(Artifact o, Character ch)
+        public void TransferArtifact(Artifact artifact, Character target)
         {
-            if (!_inventory.Contains(o))
+            if (!_inventory.Contains(artifact))
             {
                 throw new ArgumentException("There is no such artifact in the bag");
             }
-            ch.AddArtifact(o);
-            RemoveArtifact(o);
+            target.AddArtifact(artifact);
+            RemoveArtifact(artifact);
         }
     }
     public class Wizard : Character
