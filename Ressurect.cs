@@ -48,6 +48,8 @@ namespace Role_playing_game
             Caster.MP -= (int)ManaCost;
             target.State = Character.States.Weak;
             target.HP = 1;
+            target.CanMove = true;
+            target.CanSpeak = true;
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Role_playing_game
             {
                 return this._canSpeak;
             }
-            protected set
+            set
             {
                 this._canSpeak = value;
             }
@@ -146,8 +146,6 @@ namespace Role_playing_game
                 {
                     this._hp = 0;
                     this.State = States.Dead;
-                    this.CanMove = true;
-                    this.CanSpeak = true;
                 }
                 else if (value > this.MaxHP)
                 {
